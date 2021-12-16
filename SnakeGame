@@ -1,0 +1,427 @@
+#include <iostream>
+#include <windows.h>
+#include <chrono>
+#include <thread>
+#include <string>
+
+
+int x = 40, y = 15;
+int movementConstant = 0;
+int i = 1;
+int beginn = 1;
+int b = x, c = y;
+int codaGrow = 0;
+int xcoda[500000], ycoda[500000];
+int var = 0;
+int points = codaGrow * 50;
+bool game_Running = true;
+int speedX = 0, speedY = 0;
+void collision();
+void beginnPosition(int x, int y);
+
+void choseMenu()
+{
+    std::cout << "GAME OVER" << std::endl;
+    COORD variableName4 = { 45, 16 }; // {x , y}
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName4);
+    std::cout << " *****MENU*****" << std::endl;
+    COORD variableName5 = { 40, 17 }; // {x , y}
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName5);
+    std::cout << " PRESS 1. To Play again" << std::endl;
+    COORD variableName6 = { 40, 18 }; // {x , y}
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName6);
+    std::cout << " PRESS 2. See scores" << std::endl;
+    COORD variableName7 = { 40, 19 }; // {x , y}
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName7);
+    std::cout << " PRESS 3. Exit Game" << std::endl;
+}
+
+void beginGame() {
+    if (beginn == 1) {
+        beginnPosition(25, 15);
+        std::cout << "PRESS A KEY TO START PLAYING!";
+    }
+}
+
+void beginnPosition(int x, int y) {
+
+    COORD variableName = { x, y }; // {x , y}
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName);
+}
+
+void fieldGame() {
+    int height = 25;
+    int o = 1;
+
+    for (int i = 0; i <= height; i++) {
+        if (i == 0) {
+            std::cout << std::endl;
+        }
+        if (i == o ) {
+            std::cout << "           _____________________________________________________________________________" << std::endl;
+        }
+        if (i < height && i != 0) {
+
+            std::cout << "          |                   |                                                         | "<< std::endl; 
+        }       
+        if (i == height) {
+            std::cout << "          |___________________|_________________________________________________________|" << std::endl;;
+        }
+    }
+}
+
+void actualPosition(int snakeXcoor, int snakeYcoor) {
+    COORD   variableName4 = { snakeXcoor, snakeYcoor }; // {x , y}
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName4);
+    std::cout << "SNAKE " << "X: " << x << "  Y: " << y;
+}
+
+void spawningFruits() {
+    if (x == b && y == c){
+    b = rand() % (30 - 88 + 1) + 30;
+    c = rand() % (2 - 27 + 1) + 2;
+    COORD variableName8 = { b, c }; // {b , c}
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName8);
+    std::cout << "#";
+    codaGrow++;
+    }
+}
+
+void gameSpeedXaxes() {
+
+    if (points > 199 && points < 399) {
+        speedX = 70;
+        Sleep(speedX);
+    }
+    if (points > 399 && points < 599) {
+        speedX = 60;
+        Sleep(speedX);
+    }
+    if (points > 599 && points < 799) {
+        speedX = 50;
+        Sleep(speedX);
+    }
+    if (points < 199) {
+        speedX = 80;
+        Sleep(speedX);
+    }
+}
+
+void gameSpeedYaxes() {
+    if (points > 199 && points < 399) {
+        speedY = 150;
+        Sleep(speedY);
+    }
+    if (points > 399 && points < 599) {
+        speedY = 130;
+        Sleep(speedY);
+    }
+    if (points > 599 && points < 799) {
+        speedY = 110;
+        Sleep(speedY);
+    }
+    if (points < 199) {
+        speedY = 170;
+        Sleep(speedY);
+    }
+}
+
+void score(int scoreXcoor, int scoreYcoor) {
+    COORD   variableName12 = { scoreXcoor, scoreYcoor }; // {x , y}
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName12);
+    points = codaGrow * 50;
+    std::cout << "SCORE: " <<points;  
+}
+
+void speedCoor(int speedXcoor, int speedYcoor) {
+    COORD   variableName12 = { speedXcoor, speedYcoor }; // {x , y}
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName12);
+    points = codaGrow * 50;
+    std::cout << "SPEED: " << 500-(speedY+speedX);
+}
+
+void contastMovingFunction() {
+    
+    if (movementConstant == 1) { //UP ARROW Y axes  
+        beginnPosition(x, --y);  
+       std::cout << "O";
+       i++;
+       gameSpeedYaxes();
+    }
+    if (movementConstant == 2) {//RIGHT ARROW X axes
+        beginnPosition(++x, y);
+        std::cout << "O";
+        i++;
+        gameSpeedXaxes();
+    }
+    if (movementConstant == 3) {//LEFT ARROW X axex
+        beginnPosition(--x, y);
+        std::cout << "O";
+        i++;
+        gameSpeedXaxes();
+    }
+    if (movementConstant == 4) {//DOWN ARROW Y axes
+        beginnPosition(x, ++y);
+        std::cout << "O";
+        i++;
+        gameSpeedYaxes();
+    }
+}
+void codaFunction(int codaPezzo) {
+    int collX = xcoda[i - codaPezzo];
+    int collY = ycoda[i - codaPezzo];
+    if( var >= 1){
+    if (collX == x && collY == y) {
+
+        game_Running = false;
+    }
+    }
+    beginnPosition(xcoda[i - codaPezzo], ycoda[i - codaPezzo]);
+    std::cout << "o";
+}
+void crescitaCodaFunction(int pezzo) {
+    var = 0;
+    if (pezzo >= 1) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo >= 2) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo >= 3) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo >= 4) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo >= 5) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo >= 6) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo >= 7) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo >= 8) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo >= 9) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo >= 10) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo >= 11) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo >= 12) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo >= 13) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 14) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 15) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 16) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 17) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 18) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 19) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 20) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 21) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 22) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 23) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 24) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 25) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 26) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 27) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 28) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 29) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 30) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 31) {
+        codaFunction(30);
+        var++;
+    }
+    if (pezzo > 32) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 33) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 34) {
+        codaFunction(var);
+        var++;
+    }
+    if (pezzo > 35) {
+        codaFunction(var);
+        var++;
+    }
+}
+void movementGraph(int t = 0, int l = 0) {
+    beginnPosition(t,l);
+    std::cout << "MOVEMENTS: " << i;
+}
+void fielGameUpdate() { 
+beginnPosition(11,4);
+std::cout << "___________________" ;
+beginnPosition(11, 7);
+std::cout << "___________________";
+beginnPosition(11, 10);
+std::cout << "___________________";
+beginnPosition(11, 13);
+std::cout << "___________________";
+}
+void fruitPosition(int fruitXcoor, int fruitYcoor) {
+    COORD   variableName12 = { fruitXcoor, fruitYcoor }; // {x , y}
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName12);
+    std::cout << "FRUIT " << "X: " << b << "  Y: " << c;
+}
+void game_GoingOn() {
+   // bool game_Running = true;
+    while (game_Running) {
+        for ( ; game_Running; ) {
+            fieldGame();
+            fielGameUpdate();
+            movementGraph(11,9);
+            actualPosition(11, 3);  
+            fruitPosition(11, 6);
+            score(77, 2);
+            speedCoor(11, 12);
+            int x2 = x, y2 = y;          
+            beginnPosition(x, y);    
+            if (i == 1) {
+                beginnPosition(43, 14);
+                std::cout << "PRESS A KEY TO START PLAYING!";
+                Sleep(350);
+            }
+            xcoda[i] = x, ycoda[i] = y;
+            crescitaCodaFunction(codaGrow);
+            spawningFruits();
+            COORD variableName8 = { b, c }; // {b , c}
+            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName8);
+            std::cout << "#";
+            if (x <= 30 || x >= 88 || y >= 27 || y <= 1) {
+                game_Running = false;
+            }
+            contastMovingFunction();
+            
+            if (GetAsyncKeyState(VK_UP)) {  //UP ARROW                                   
+                movementConstant = 1;
+            }
+            if (GetAsyncKeyState(VK_RIGHT)) { //RIGHT ARROW                 
+                movementConstant = 2;               
+            }
+            if (GetAsyncKeyState(VK_LEFT)) { //LEFT ARROW                
+                movementConstant = 3;                
+            }
+            if (GetAsyncKeyState(VK_DOWN)) { //DOWN ARROW                                  
+                movementConstant = 4;
+            }
+            if (GetAsyncKeyState(VK_ESCAPE)) { //ESC End Game     
+                system("cls");
+                COORD endGame = { 30, 15 }; // {x , y}
+                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), endGame);
+                std::cout << " ************************** YOU EXIT **************************";
+                system("pause>0");           
+            }             
+            system("cls");
+        }
+    }
+}
+
+int main()
+{
+    system("COLOR 9F");
+    game_GoingOn();
+    collision();
+    system("pause>0");
+}
+void menu() {
+    choseMenu();
+    bool menuLoop = true;
+    x = 40, y = 15;
+    b = 40, c = 15;
+    i = 1;
+    beginn = 1;
+    codaGrow = 0;
+    var = 0;
+    game_Running = true;
+    while (menuLoop) {
+        if (GetAsyncKeyState(VK_NUMPAD1)) { //1. PLAY AGAIN  
+            menuLoop = false;
+            system("cls");
+             main();
+        }
+    }
+}
+void collision() {
+    system("cls");
+    COORD variableName3 = { 49, 15 }; // {x , y}
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName3);
+    menu();
+}
