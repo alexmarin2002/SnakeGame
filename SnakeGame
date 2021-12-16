@@ -101,6 +101,10 @@ void gameSpeedXaxes() {
         speedX = 50;
         Sleep(speedX);
     }
+    if (points > 800 ) {
+        speedX = 40;
+        Sleep(speedX);
+    }
     if (points < 199) {
         speedX = 80;
         Sleep(speedX);
@@ -118,6 +122,10 @@ void gameSpeedYaxes() {
     }
     if (points > 599 && points < 799) {
         speedY = 110;
+        Sleep(speedY);
+    }
+    if (points > 800) {
+        speedY = 90;
         Sleep(speedY);
     }
     if (points < 199) {
