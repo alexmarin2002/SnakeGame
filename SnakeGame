@@ -1,7 +1,5 @@
 #include <iostream>
 #include <windows.h>
-#include <chrono>
-#include <thread>
 #include <string>
 
 
@@ -30,10 +28,10 @@ void choseMenu()
     std::cout << " PRESS 1. To Play again" << std::endl;
     COORD variableName6 = { 40, 18 }; // {x , y}
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName6);
-    std::cout << " PRESS 2. See scores" << std::endl;
-    COORD variableName7 = { 40, 19 }; // {x , y}
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName7);
-    std::cout << " PRESS 3. Exit Game" << std::endl;
+    //std::cout << " PRESS 2. See scores" << std::endl;
+    //COORD variableName7 = { 40, 19 }; // {x , y}
+    //SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName7);
+    //std::cout << " PRESS 3. Exit Game" << std::endl;
 }
 
 void beginGame() {
@@ -65,7 +63,7 @@ void fieldGame() {
             std::cout << "          |                   |                                                         | "<< std::endl; 
         }       
         if (i == height) {
-            std::cout << "          |___________________|_________________________________________________________|" << std::endl;;
+            std::cout << "          |___________________|_________________________________________________________|" << std::endl;
         }
     }
 }
@@ -101,10 +99,6 @@ void gameSpeedXaxes() {
         speedX = 50;
         Sleep(speedX);
     }
-    if (points > 800 ) {
-        speedX = 40;
-        Sleep(speedX);
-    }
     if (points < 199) {
         speedX = 80;
         Sleep(speedX);
@@ -122,10 +116,6 @@ void gameSpeedYaxes() {
     }
     if (points > 599 && points < 799) {
         speedY = 110;
-        Sleep(speedY);
-    }
-    if (points > 800) {
-        speedY = 90;
         Sleep(speedY);
     }
     if (points < 199) {
@@ -344,11 +334,13 @@ std::cout << "___________________";
 beginnPosition(11, 13);
 std::cout << "___________________";
 }
+
 void fruitPosition(int fruitXcoor, int fruitYcoor) {
     COORD   variableName12 = { fruitXcoor, fruitYcoor }; // {x , y}
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), variableName12);
-    std::cout << "FRUIT " << "X: " << b << "  Y: " << c;
+   std::cout << "FRUIT " << "X: " << b << "  Y: " << c;
 }
+
 void game_GoingOn() {
    // bool game_Running = true;
     while (game_Running) {
@@ -423,7 +415,7 @@ void menu() {
         if (GetAsyncKeyState(VK_NUMPAD1)) { //1. PLAY AGAIN  
             menuLoop = false;
             system("cls");
-             main();
+            main();
         }
     }
 }
